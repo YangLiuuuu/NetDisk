@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwzw.cloud.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.lwzw.cloud.bean.User">
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="passwords" jdbcType="VARCHAR" property="passwords" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="capacity" jdbcType="DOUBLE" property="capacity" />
+  </resultMap>
+  <insert id="insert" parameterType="com.lwzw.cloud.bean.User">
+    insert into user (uid, username, passwords,
+      nickname, score, capacity
+      )
+    values (#{uid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{passwords,jdbcType=VARCHAR},
+      #{nickname,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, #{capacity,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lwzw.cloud.bean.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="passwords != null">
+        passwords,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="capacity != null">
+        capacity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="passwords != null">
+        #{passwords,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="capacity != null">
+        #{capacity,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateUser" parameterType="com.lwzw.cloud.bean.User">
+    update user
+    set username=#{username},
+        passwords=#{passwords},
+        nickname=#{nickname},
+        score=#{score},
+        capacity=#{capacity}
+    where uid=#{uid}
+  </update>
+  <update id="updateUserSelective" parameterType="com.lwzw.cloud.bean.User">
+    update user
+    <trim prefix="set"  suffixOverrides=",">
+      <if test="passwords != null">
+        passwords = #{passwords},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname},
+      </if>
+      <if test="score != null">
+        score = #{score},
+      </if>
+      <if test="capacity != null">
+        capacity = #{capacity},
+      </if>
+    </trim>
+    where uid = #{uid}
+  </update>
+  <select id="selectByUsername" resultType="com.lwzw.cloud.bean.User">
+    select * from user where username = #{username}
+  </select>
+</mapper>

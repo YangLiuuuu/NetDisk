@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwzw.cloud.dao.ShareMapper" >
+  <resultMap id="BaseResultMap" type="com.lwzw.cloud.bean.Share" >
+    <id column="sid" property="sid" jdbcType="INTEGER" />
+    <result column="ufid" property="ufid" jdbcType="INTEGER" />
+    <result column="touid" property="touid" jdbcType="INTEGER" />
+    <result column="fromuid" property="fromuid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="isread" property="isread" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, ufid, touid, fromuid, status, code, isread
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from share
+    where sid = #{sid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from share
+    where sid = #{sid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lwzw.cloud.bean.Share" >
+    insert into share (sid, ufid, touid, 
+      fromuid, status, code, 
+      isread)
+    values (#{sid,jdbcType=INTEGER}, #{ufid,jdbcType=INTEGER}, #{touid,jdbcType=INTEGER}, 
+      #{fromuid,jdbcType=INTEGER}, #{status,jdbcType=BIT}, #{code,jdbcType=VARCHAR}, 
+      #{isread,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lwzw.cloud.bean.Share" >
+    insert into share
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="ufid != null" >
+        ufid,
+      </if>
+      <if test="touid != null" >
+        touid,
+      </if>
+      <if test="fromuid != null" >
+        fromuid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="isread != null" >
+        isread,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="ufid != null" >
+        #{ufid,jdbcType=INTEGER},
+      </if>
+      <if test="touid != null" >
+        #{touid,jdbcType=INTEGER},
+      </if>
+      <if test="fromuid != null" >
+        #{fromuid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="isread != null" >
+        #{isread,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lwzw.cloud.bean.Share" >
+    update share
+    <set >
+      <if test="ufid != null" >
+        ufid = #{ufid,jdbcType=INTEGER},
+      </if>
+      <if test="touid != null" >
+        touid = #{touid,jdbcType=INTEGER},
+      </if>
+      <if test="fromuid != null" >
+        fromuid = #{fromuid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="isread != null" >
+        isread = #{isread,jdbcType=BIT},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lwzw.cloud.bean.Share" >
+    update share
+    set ufid = #{ufid,jdbcType=INTEGER},
+      touid = #{touid,jdbcType=INTEGER},
+      fromuid = #{fromuid,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT},
+      code = #{code,jdbcType=VARCHAR},
+      isread = #{isread,jdbcType=BIT}
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+</mapper>

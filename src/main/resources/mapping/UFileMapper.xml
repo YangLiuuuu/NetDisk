@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwzw.cloud.dao.UFileMapper" >
+  <resultMap id="BaseResultMap" type="com.lwzw.cloud.bean.UFile" >
+    <id column="ufid" property="ufid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="savedate" property="savedate" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  <resultMap id="fileViewObject" type="com.lwzw.cloud.bean.viewObject.FileViewObject">
+    <id column="ufid" property="ufid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="name" property="fileName" jdbcType="VARCHAR" />
+    <result column="savedate" property="saveDate" jdbcType="TIMESTAMP"/>
+    <result column="size" property="size"/>
+    <result column="levels" property="levels"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ufid, uid, fid, name,savedate
+  </sql>
+
+  <!--联合查询FileViewObject-->
+  <select id="selectFileViewObject" resultMap="fileViewObject">
+      select
+        ufid,uid,b.fid,name,savedate,size,levels
+      from
+      ufile a,file b
+      where a.fid = b.fid and a.uid = #{user.uid}
+  </select>
+
+  <select id="selectPictureFile" resultMap="fileViewObject">
+    select
+           ufid,uid,b.fid,name,savedate,size,levels
+    from
+         ufile a,file b
+    where a.fid = b.fid and a.uid = #{user.uid} and (name like '%jpg%' or name like '%png%' or name like '%jpeg%' or name like '%gif%')
+  </select>
+
+  <select id="selectVideoAndMusicFile" resultMap="fileViewObject">
+    select
+           ufid,uid,b.fid,name,savedate,size,levels
+    from
+         ufile a,file b
+    where a.fid = b.fid and a.uid = #{user.uid} and (name like '%mp4%' or name like '%rmvb%' or name like '%mkv%' or name like '%avi%' or name like '%flv%'or name like '%mp3%' or name like '%ape%' or name like '%flac%' or name like '%aac%' or name like '%wma%')
+  </select>
+
+  <select id="selectDocFile" resultMap="fileViewObject">
+    select
+           ufid,uid,b.fid,name,savedate,size,levels
+    from
+         ufile a,file b
+    where a.fid = b.fid and a.uid = #{user.uid} and (name like '%txt%' or name like '%ppt%' or name like '%xls%' or name like '%doc%' or name like '%docx%'or name like '%pdf%')
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ufile
+    where ufid = #{ufid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByUser" resultType="com.lwzw.cloud.bean.UFile">
+    select
+    <include refid="Base_Column_List"/>
+    from ufile
+    where uid=#{uid}
+  </select>
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ufile
+    where ufid = #{ufid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lwzw.cloud.bean.UFile" keyProperty="ufid" useGeneratedKeys="true">
+    insert into ufile (ufid, uid, fid, 
+      name,savedate)
+    values (#{ufid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR},#{savedate})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lwzw.cloud.bean.UFile" >
+    insert into ufile
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ufid != null" >
+        ufid,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="fid != null" >
+        fid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="savadate != null">
+        savedate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ufid != null" >
+        #{ufid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="savedate != null">
+        #{savedate,jdbcType=TIMESTAMP}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lwzw.cloud.bean.UFile" >
+    update ufile
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="fid != null" >
+        fid = #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="savedate != null">
+        savedate = #{savedate,jdbcType=TIMESTAMP}
+      </if>
+    </set>
+    where ufid = #{ufid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lwzw.cloud.bean.UFile" >
+    update ufile
+    set uid = #{uid,jdbcType=INTEGER},
+      fid = #{fid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      savedate = #{savedate,jdbcType=TIMESTAMP}
+    where ufid = #{ufid,jdbcType=INTEGER}
+  </update>
+</mapper>

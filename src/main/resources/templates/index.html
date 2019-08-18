@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- saved from url=(0044)http://demo.demohuo.top/modals/58/5868/demo/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>CSS3动态背景登录页面</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/js/jquery-1.9.1.min.js"></script>
+    <!--<script type="text/javascript" src="/js/jquery-3.3.1.slim.min.js"></script>-->
+    <script type="text/javascript" src="/js/index.js"></script>
+<link href="/css/style.css" rel="stylesheet" type="text/css" media="all">
+
+</head>
+<body>
+
+	<!-- main -->
+	<div class="main-w3layouts wrapper">
+		<div class="main-agileinfo">
+			<div class="agileits-top" >
+
+				<form action="#" method="post" id="signupform">
+					<p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+					<input class="text" type="text" id="signusername" name="username" placeholder="账号" required="" value="123456789"><div></div>
+
+					<input class="text" type="password" id="siginpass" name="passwords" placeholder="密码" required="" value="123456">
+
+					<input type="button" value="登录" id="sigininbtn">
+				</form>
+
+				<form action="#" method="post" id="signinform" style="display: none;">
+					<p  id="signuptitle">注册</p>
+					<input class="text" type="text" name="username" id="signupusername" placeholder="账号:9-11位字母或数字" required=""><div></div>
+					<p style="color: red;display: none" id="tips">账号已被注册，请更换</p>
+					<input class="text" type="text" name="nickname"  placeholder="昵称" required="" id="nickname" >
+					<input class="text" type="password" name="passwords" placeholder="密码:6-12位字母或数字" required="" id="signuppass">
+					<input class="text" type="password"  placeholder="再次输入密码" required="" id="confirmpass" >
+
+					<input type="button" value="注册" id="signupbtn">
+				</form>
+				<p><a href="#" id="switch" class="signin">创建一个账号</a> </p>
+			</div>	 
+		</div>	
+		<!-- copyright -->
+		<div class="w3copyright-agile">
+			<p>© 2019 yangyangyang . All rights <a href="#" title="yangyangyang">Reserved</a></p>
+		</div>
+		<!-- //copyright -->
+		<ul class="w3lsg-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>	
+	<!-- //main -->
+
+</body></html>

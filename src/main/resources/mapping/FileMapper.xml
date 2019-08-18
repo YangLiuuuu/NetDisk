@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwzw.cloud.dao.FileMapper" >
+  <resultMap id="BaseResultMap" type="com.lwzw.cloud.bean.File" >
+    <id column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="upid" property="upid" jdbcType="INTEGER" />
+    <result column="fname" property="fname" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="DOUBLE" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+    <result column="likes" property="likes" jdbcType="INTEGER" />
+    <result column="dislike" property="dislike" jdbcType="INTEGER" />
+    <result column="levels" property="levels" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fid, upid, fname, url, size, date, likes, dislike, levels
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from file
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  <select id="selectMaxFileId" resultType="java.lang.Integer">
+    select ifnull(max(fid),0) fid from file
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from file
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+    <!--配置keyProperty和useGeneratedKey mybatis会将插入后的id值返回到实体类-->
+  <insert id="insert" parameterType="com.lwzw.cloud.bean.File" keyProperty="fid" useGeneratedKeys="true">
+    insert into file (fid, upid, fname, 
+      url, size, date, likes, 
+      dislike, levels)
+    values (#{fid,jdbcType=INTEGER}, #{upid,jdbcType=INTEGER}, #{fname,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, #{date,jdbcType=TIMESTAMP}, #{likes,jdbcType=INTEGER},
+      #{dislike,jdbcType=INTEGER}, #{levels,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lwzw.cloud.bean.File" >
+    insert into file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fid,
+      </if>
+      <if test="upid != null" >
+        upid,
+      </if>
+      <if test="fname != null" >
+        fname,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="likes != null" >
+        likes,
+      </if>
+      <if test="dislike != null" >
+        dislike,
+      </if>
+      <if test="levels != null" >
+        levels,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="upid != null" >
+        #{upid,jdbcType=INTEGER},
+      </if>
+      <if test="fname != null" >
+        #{fname,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=DOUBLE},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="likes != null" >
+        #{likes,jdbcType=INTEGER},
+      </if>
+      <if test="dislike != null" >
+        #{dislike,jdbcType=INTEGER},
+      </if>
+      <if test="levels != null" >
+        #{levels,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lwzw.cloud.bean.File" >
+    update file
+    <set >
+      <if test="upid != null" >
+        upid = #{upid,jdbcType=INTEGER},
+      </if>
+      <if test="fname != null" >
+        fname = #{fname,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=DOUBLE},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="likes != null" >
+        likes = #{likes,jdbcType=INTEGER},
+      </if>
+      <if test="dislike != null" >
+        dislike = #{dislike,jdbcType=INTEGER},
+      </if>
+      <if test="levels != null" >
+        levels = #{levels,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lwzw.cloud.bean.File" >
+    update file
+    set upid = #{upid,jdbcType=INTEGER},
+      fname = #{fname,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      size = #{size,jdbcType=DOUBLE},
+      date = #{date,jdbcType=TIMESTAMP},
+      likes = #{likes,jdbcType=INTEGER},
+      dislike = #{dislike,jdbcType=INTEGER},
+      levels = #{levels,jdbcType=INTEGER}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

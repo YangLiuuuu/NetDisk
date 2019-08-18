@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwzw.cloud.dao.RelationMapper" >
+  <resultMap id="BaseResultMap" type="com.lwzw.cloud.bean.Relation" >
+    <id column="relaid" property="relaid" jdbcType="INTEGER" />
+    <result column="fromuid" property="fromuid" jdbcType="INTEGER" />
+    <result column="touid" property="touid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    relaid, fromuid, touid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from relation
+    where relaid = #{relaid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from relation
+    where relaid = #{relaid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lwzw.cloud.bean.Relation" >
+    insert into relation (relaid, fromuid, touid
+      )
+    values (#{relaid,jdbcType=INTEGER}, #{fromuid,jdbcType=INTEGER}, #{touid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lwzw.cloud.bean.Relation" >
+    insert into relation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="relaid != null" >
+        relaid,
+      </if>
+      <if test="fromuid != null" >
+        fromuid,
+      </if>
+      <if test="touid != null" >
+        touid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="relaid != null" >
+        #{relaid,jdbcType=INTEGER},
+      </if>
+      <if test="fromuid != null" >
+        #{fromuid,jdbcType=INTEGER},
+      </if>
+      <if test="touid != null" >
+        #{touid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lwzw.cloud.bean.Relation" >
+    update relation
+    <set >
+      <if test="fromuid != null" >
+        fromuid = #{fromuid,jdbcType=INTEGER},
+      </if>
+      <if test="touid != null" >
+        touid = #{touid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where relaid = #{relaid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lwzw.cloud.bean.Relation" >
+    update relation
+    set fromuid = #{fromuid,jdbcType=INTEGER},
+      touid = #{touid,jdbcType=INTEGER}
+    where relaid = #{relaid,jdbcType=INTEGER}
+  </update>
+</mapper>

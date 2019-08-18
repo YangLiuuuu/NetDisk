@@ -1,0 +1,33 @@
+debug: true
+spring:
+  devtools:
+    restart:
+      enabled: true  #开启热部署
+  thymeleaf:
+    cache: false  #关闭thymeleaf缓存，方便调试
+  servlet:
+    multipart:     #文件上传大小限制
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  #数据源配置
+  datasource:
+    username: root
+    password: 1909227160
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/cloud?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+
+  # mvc请求映射配置，使用默认文件寻找规则，后缀为html
+#  mvc:
+#    view:
+#      prefix:
+#      suffix:
+
+mybatis:
+  mapper-locations: classpath:/mapping/*Mapper.xml
+  #type-aliases-package: com.lwzw.cloud.bean
+
+logging:
+  level:
+    com.lwzw.cloud.dao: debug
+
+
