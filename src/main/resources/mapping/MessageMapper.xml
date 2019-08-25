@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwzw.cloud.dao.MessageMapper" >
+  <resultMap id="BaseResultMap" type="com.lwzw.cloud.bean.Message" >
+    <id column="msgid" property="msgid" jdbcType="INTEGER" />
+    <result column="fromuid" property="fromuid" jdbcType="INTEGER" />
+    <result column="touid" property="touid" jdbcType="INTEGER" />
+    <result column="accepted" property="accepted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    msgid, fromuid, touid, accepted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where msgid = #{msgid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByFromAndToUid" resultType="com.lwzw.cloud.bean.Message">
+    select
+    <include refid="Base_Column_List" />
+    from message
+    where
+    fromuid = #{from} and touid = #{to}
+  </select>
+  <select id="selectByFromUid" resultType="com.lwzw.cloud.bean.Message">
+    select
+    <include refid="Base_Column_List"/>
+    from message
+    where fromuid = #{from} or touid = #{from}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from message
+    where msgid = #{msgid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lwzw.cloud.bean.Message" >
+    insert into message (msgid, fromuid, touid, 
+      accepted)
+    values (#{msgid,jdbcType=INTEGER}, #{fromuid,jdbcType=INTEGER}, #{touid,jdbcType=INTEGER}, 
+      #{accepted,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lwzw.cloud.bean.Message" >
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msgid != null" >
+        msgid,
+      </if>
+      <if test="fromuid != null" >
+        fromuid,
+      </if>
+      <if test="touid != null" >
+        touid,
+      </if>
+      <if test="accepted != null" >
+        accepted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msgid != null" >
+        #{msgid,jdbcType=INTEGER},
+      </if>
+      <if test="fromuid != null" >
+        #{fromuid,jdbcType=INTEGER},
+      </if>
+      <if test="touid != null" >
+        #{touid,jdbcType=INTEGER},
+      </if>
+      <if test="accepted != null" >
+        #{accepted,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lwzw.cloud.bean.Message" >
+    update message
+    <set >
+      <if test="fromuid != null" >
+        fromuid = #{fromuid,jdbcType=INTEGER},
+      </if>
+      <if test="touid != null" >
+        touid = #{touid,jdbcType=INTEGER},
+      </if>
+      <if test="accepted != null" >
+        accepted = #{accepted,jdbcType=INTEGER},
+      </if>
+    </set>
+    where msgid = #{msgid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lwzw.cloud.bean.Message" >
+    update message
+    set fromuid = #{fromuid,jdbcType=INTEGER},
+      touid = #{touid,jdbcType=INTEGER},
+      accepted = #{accepted,jdbcType=INTEGER}
+    where msgid = #{msgid,jdbcType=INTEGER}
+  </update>
+</mapper>

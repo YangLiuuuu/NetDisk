@@ -12,6 +12,8 @@ public interface UserMapper {
 
     List<User>selectByUsername(@Param("username") String username);
 
+    User selectByPrimaryKey(Integer uid);
+
     int updateUserSelective(User record);
 
     int updateUser(User user);

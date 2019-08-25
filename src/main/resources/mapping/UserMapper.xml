@@ -91,4 +91,9 @@
   <select id="selectByUsername" resultType="com.lwzw.cloud.bean.User">
     select * from user where username = #{username}
   </select>
+    <select id="selectByPrimaryKey" resultType="com.lwzw.cloud.bean.User">
+      select *
+      from user
+      where uid = #{uid}
+    </select>
 </mapper>

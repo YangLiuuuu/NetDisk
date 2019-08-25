@@ -73,7 +73,7 @@ public class UserController {
         if (password.length()<=5 || password.length()>=12){
             return false;
         }
-        if (nickname.length()<=0||nickname.length()>=10){
+        if (nickname.length()<=0||nickname.length()>=15){
             return false;
         }
         return true;
