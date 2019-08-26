@@ -4,7 +4,7 @@ import com.lwzw.cloud.bean.User;
 
 public class FriendViewObject {
     private User user;
-    private boolean isFriend;
+    private boolean isFriend;//是否已经是好友
 
     public FriendViewObject(User user, boolean isFriend) {
         this.user = user;

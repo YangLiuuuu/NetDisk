@@ -53,19 +53,18 @@ public class RelationController {
 
             //接下来判断查找到的用户是否已经是好友
             User loginUser = (User) request.getSession().getAttribute("loginUser");//loginUser为当前用户
-            Integer fromId = loginUser.getUid();//好友关系一方id
-            Integer toUid = user.getUid();//另一方id
+            int fromId = loginUser.getUid();//好友关系一方id
+            int toUid = user.getUid();//另一方id
             if (fromId>toUid){//始终是第一方id小
-                Integer t = fromId;
+                int t = fromId;
                 fromId = toUid;
                 toUid = t;
             }
-            List<Relation> relations = relationMapper.selectByFromId(fromId);
-            for (Relation relation:relations){
-                if (relation.getTouid().equals(toUid)){
-                    friendViewObject.setIsFriend(true);//已经是好友
-                    break;
-                }
+            Relation relation = relationMapper.selectByFromAndToUid(fromId,toUid);
+            if (relation==null){
+                friendViewObject.setIsFriend(false);
+            }else{
+                friendViewObject.setIsFriend(true);
             }
             return ServerResponse.createBySuccess(friendViewObject);
         }else{
@@ -97,7 +96,7 @@ public class RelationController {
         return ServerResponse.createBySuccess();
     }
 
-    /** todo修改查询加好友逻辑
+    /**
      * 查询加好友请求
      * @return
      */
@@ -105,38 +104,71 @@ public class RelationController {
     @RequestMapping("queryfriendrequest")
     public ServerResponse queryFriendRequest(HttpServletRequest request){
         User loginUser = (User) request.getSession().getAttribute("loginUser");
-        List<Message>messages = messageMapper.selectByFromUid(loginUser.getUid());
+        List<Message>messages = messageMapper.selectByUid(loginUser.getUid());
         List<MessageViewObject> messageViewObjects = new ArrayList<>();
         for (Message msg : messages){
-            User user1 = userMapper.selectByPrimaryKey(msg.getTouid());
-            User user2 = loginUser;
-            user2.setPasswords("");//去掉密码
-            user1.setPasswords("");
             MessageViewObject mv = new MessageViewObject();
-            mv.setMessage(msg);
-
-            if (msg.getFromuid().equals(loginUser.getUid())){
-                mv.setFromUser(user2);
-                mv.setToUser(user1);
+            loginUser.setPasswords("");//去掉密码
+            if (msg.getFromuid().equals(loginUser.getUid())){//自己是发送方
+                mv.setFromUser(loginUser);
+                mv.setToUser(userMapper.selectByPrimaryKey(msg.getTouid()));
                 mv.setIsSender(1);
             }else {
+                mv.setFromUser(userMapper.selectByPrimaryKey(msg.getFromuid()));
+                mv.setToUser(loginUser);
                 mv.setIsSender(0);
-                mv.setFromUser(user1);
-                mv.setToUser(user2);
             }
+            mv.setMessage(msg);
             messageViewObjects.add(mv);
         }
         return ServerResponse.createBySuccess(messageViewObjects);
     }
 
+    //添加好友
     @ResponseBody
     @RequestMapping("addfriend")
     public ServerResponse addFriend(@Param("msgid")String msgid){
-        Message message = new Message();
+        Message message = messageMapper.selectByPrimaryKey(Integer.valueOf(msgid));
         message.setAccepted(1);
         message.setMsgid(Integer.valueOf(msgid));
-        int count = messageMapper.updateByPrimaryKey(message);
+        int count = messageMapper.updateByPrimaryKeySelective(message);
+        int fromuid = message.getFromuid();
+        int touid = message.getTouid();
+        int t=0;
+        if (fromuid>touid){//如果第一方id较大，交换
+            t = fromuid;
+            fromuid = touid;
+            touid = t;
+        }
+        Relation relation = relationMapper.selectByFromAndToUid(fromuid,touid);
+        if (relation==null){
+            relation = new Relation();
+            relation.setFromuid(fromuid);
+            relation.setTouid(touid);
+            relationMapper.insert(relation);
+        }
         if (count>0) return ServerResponse.createBySuccess();
         else return ServerResponse.createByError();
+    }
+
+    /**
+     * 查询好友请求
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("queryfriendlist")
+    public ServerResponse queryFriendList(HttpServletRequest request){
+        User loginUser = (User) request.getSession().getAttribute("loginUser");
+        List<Relation> relationList= relationMapper.selectFriends(loginUser.getUid());//找到所有好友用户id
+        List<User>friendList = new ArrayList<>();
+        //根据好友id查找好友信息
+        for (Relation relation:relationList){
+            int fromuid = relation.getFromuid();
+            int toUid = relation.getTouid();
+            User friend = userMapper.selectByPrimaryKey(loginUser.getUid()==fromuid ? toUid : fromuid);
+            friend.setPasswords("");
+            friendList.add(friend);
+        }
+        return ServerResponse.createBySuccess(friendList);
     }
 }

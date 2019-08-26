@@ -22,14 +22,15 @@
             list-style: none;
         }
         .friend-list-item{
-            background-color: #FFF5EE;
+            background-color:#F0FFFF;
             margin: 2px;
             padding: 10px;
-            height: 50px;
+            height: 60px;
         }
         .friend-list-item:hover{
-            background-color: #87CEFA;
-            height: 50px;
+            background-color: #00FFFF;
+            font-size: 20px;
+            height: 80px;
         }
         .user-data-name{
             padding-top: 50px;
@@ -69,46 +70,13 @@
                         <a data-toggle="tab" href="#panel-457953">好友</a>
                     </li>
                     <li>
-                        <a data-toggle="tab" href="#panel-175147">会话</a>
+                        <a data-toggle="tab" href="#panel-175147">好友请求</a>
                     </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="panel-457953">
                         <div style="overflow-y:scroll;height: 450px">
-                            <ul style="min-height: 450px;background-color: #F5F5F5" >
-                                <li  class="friend-list-item">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item friend-list-even">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item friend-list-even">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item friend-list-even">
-                                    <p>好友1</p>
-                                </li>
-                                <li  class="friend-list-item friend-list-even">
-                                    <p>好友1</p>
-                                </li>
+                            <ul style="min-height: 450px;background-color: #F5F5F5" id="friend-list-ul">
                             </ul>
 
                         </div>
@@ -116,9 +84,8 @@
                     <div class="tab-pane" id="panel-175147">
                         <div style="overflow-y:scroll;height: 450px">
                             <ul style="min-height: 450px;background-color: #F5F5F5" id="friend-request-list">
-
+                                <!--ajax加载好友列表-->
                             </ul>
-
                         </div>
                     </div>
                 </div>
@@ -129,11 +96,19 @@
         </div>
         <div class="col-md-9">
 
-            <div id="profile_content" class="profile-content">
+            <div id="init-content" class="profile-content" style="text-align: center;height: 550px;background-color:#EEE8AA">
+                <div style="padding-top: 250px">
+                    <h2 class="text-center" >
+                        <strong>分享文件给好友</strong>
+                    </h2><hr />
+                </div>
+            </div>
+
+            <div id="profile_content" style="display: none" class="profile-content">
                 <div class="user-data-name">
                     <h2 class="text-center">
                         <strong>小明</strong>
-                    </h2><hr />
+                    </h2>
                 </div>
                 <div class="user-detail">
                     <div>
@@ -151,9 +126,11 @@
                 </div>
 
             </div>
+
         </div>
     </div>
 </div>
+
 <!-- 添加好友模态框（Modal） -->
 <div class="modal fade" id="add-friend-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

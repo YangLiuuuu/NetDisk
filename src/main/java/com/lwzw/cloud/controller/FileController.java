@@ -269,11 +269,18 @@ public class FileController  {
      * @param filename
      * @return
      */
+    @Transactional
     @ResponseBody
     @RequestMapping(value = "deleteFile",method = RequestMethod.POST)
-    public ServerResponse deleteFile(@RequestParam("ufid")String filename){
+    public ServerResponse deleteFile(@RequestParam("ufid")String filename,HttpServletRequest request){
+        UFile uFile = uFileMapper.selectByPrimaryKey(Integer.valueOf(filename));
         int count = uFileMapper.deleteByPrimaryKey(Integer.valueOf(filename));
+        com.lwzw.cloud.bean.File file = fileMapper.selectByPrimaryKey(uFile.getFid());
+        User user = (User) request.getSession().getAttribute("loginUser");
         if (count>0){
+            double originalCapacity = user.getCapacity();
+            user.setCapacity(originalCapacity+file.getSize());
+            userMapper.updateUserSelective(user);//增加容量
             return ServerResponse.createBySuccess();
         }
         return ServerResponse.createByError();
@@ -281,7 +288,7 @@ public class FileController  {
 
     @RequestMapping("/filemanage")
     public String toFileManagePage(Model model,HttpServletRequest request){
-        String fileType = request.getQueryString();
+        String fileType = request.getQueryString();//获取url查询字符串，返回相应文件
         if (null!=fileType){
             model.addAttribute("fileType",fileType.substring(fileType.indexOf("=")+1));
         }else{

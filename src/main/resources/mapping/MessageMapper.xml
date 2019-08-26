@@ -23,11 +23,11 @@
     where
     fromuid = #{from} and touid = #{to}
   </select>
-  <select id="selectByFromUid" resultType="com.lwzw.cloud.bean.Message">
+  <select id="selectByUid" resultType="com.lwzw.cloud.bean.Message">
     select
     <include refid="Base_Column_List"/>
     from message
-    where fromuid = #{from} or touid = #{from}
+    where fromuid = #{uid} or touid = #{uid}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from message

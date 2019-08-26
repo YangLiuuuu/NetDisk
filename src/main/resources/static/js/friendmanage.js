@@ -1,6 +1,9 @@
 $(function () {
 
     loadFriendRequest();//加载好友请求
+    loadFriendList();//加载好友列表
+
+
 
 
         /**
@@ -8,16 +11,18 @@ $(function () {
          */
     $(document).on('click','.acceptbtn',function () {
         var msgid = $(this).attr('msg-id');
+        var context = $(this).parent().parent();
         $.ajax({
             url:'/relation/addfriend',
             type:'post',
             data:{msgid:msgid},
             success:function (data) {
-                if (data===0){
-                    var parent = $(this).parent();//找到父节点
-                    $(parent).children('a').remove();
+                if (data.status===0){
+                    alert("添加成功")
+                    var divid = 'request-div-id-'+msgid;
+                    $('#'+divid).children('a').remove();
                     var p = $("<p>你已接受对方的请求</p>");
-                    parent.append(p);
+                    context.append(p);
                 }
             }
         })
@@ -38,13 +43,13 @@ $(function () {
                     for (var i=0;i<userdata.length;i++){
                         // console.log('加载'+userdata[i].user.nickname)
                         var li = $("<li class='friend-list-item'></li>")
-                        var div = $("<div style='float:left '></div>")
+                        var div = $("<div style=''></div>")
                         var nickname_title;
-                        if (userdata[i].message.accepted===0&&userdata[i].isSender===0){//如果自己是接收者
+                        if (userdata[i].isSender===0){//如果自己是接收者
                             if (userdata[i].message.accepted===0){//未答复
                                 nickname_title = $("<strong>"+userdata[i].fromUser.nickname+"</strong>");
-                                div.append(nickname_title).append($("<a type='button' msg-id="+userdata[i].message.msgid+" class='btn btn-info acceptbtn'>接受</a>"))
-                                    .append($("<a type='button' msg-id="+userdata[i].message.msgid+" class='btn btn-info rejectbrn'>拒绝</a>"));
+                                div.append(nickname_title).append($("<a type='button' style='float: right'  msg-id="+userdata[i].message.msgid+" class='btn btn-info btn-xs acceptbtn'>接受</a>"))
+                                    .append($("<a type='button' style='float: right' msg-id="+userdata[i].message.msgid+" class='btn btn-info btn-xs rejectbtn '>拒绝</a>"));
                             }else if (userdata[i].message.accepted===-1){//已拒绝
                                 nickname_title = $("<strong>"+userdata[i].fromUser.nickname+"</strong>");
                                 div.append(nickname_title).append($("<p>你已拒绝对方请求</p>"))
@@ -52,7 +57,6 @@ $(function () {
                                 nickname_title = $("<strong>"+userdata[i].fromUser.nickname+"</strong>");
                                 div.append(nickname_title).append($("<p>你已同意对方请求</p>"))
                             }
-
                         }else{
                             if (userdata[i].isSender===1){//自己是发送者
                                 nickname_title = $("<strong>"+userdata[i].toUser.nickname+"</strong>")
@@ -65,6 +69,7 @@ $(function () {
                                 }
                             }
                         }
+                        div.attr('id','request-div-id-'+userdata[i].message.msgid);
                         li.append(div);
                         ul.append(li);
                     }
@@ -72,6 +77,31 @@ $(function () {
             }
         })
     }
+
+        /**
+         * 加载好友列表
+         */
+        function loadFriendList(){
+            $.ajax({
+                url:'/relation/queryfriendlist',
+                type:'post',
+                success:function (data) {
+
+                    var ul = $('#friend-list-ul');
+                    var frienddata = data.data;
+                    frienddata.sort();
+                    for (var i=0;i<frienddata.length;i++){
+                        var li = $("<li class='friend-list-item' friend-uid="+frienddata[i].uid+"></li>");
+                        var div = $("<div></div>")
+                        var namep = $("<p>"+frienddata[i].nickname+"</p>")
+                        var accountp = $("<p>账号:"+frienddata[i].username+"</p>")
+                        div.append(namep).append(accountp);
+                        li.append(div);
+                        ul.append(li);
+                    }
+                }
+            })
+        }
 
         /**
          * 关闭模态框，清理内容
@@ -97,10 +127,10 @@ $(function () {
                 if (data.status===0){
                     // console.log(data.user);
                     $('#search-result-wrap').css('display','inline');
-                    if (data.friend==true){
-                        $('#add-friend-btn').addClass("disabled");
+                    if (data.data.friend==true){
+                        $('#add-friend-btn').addClass("disabled").text('已是好友');
                     }else {
-                        $('#add-friend-btn').addClass("active");
+                        $('#add-friend-btn').addClass("active").text('加为好友');
                     }
                     $('#search-result-nick').html('昵称:'+data.data.user.nickname)
                     $('#search-result-account').html('账号:'+data.data.user.username);

@@ -21,6 +21,18 @@
     from relation
     where fromuid = #{from}
   </select>
+  <select id="selectByFromAndToUid" resultType="com.lwzw.cloud.bean.Relation">
+    select
+    <include refid="Base_Column_List"/>
+    from relation
+    where fromuid=#{from} and touid = #{to}
+  </select>
+  <select id="selectFriends" resultType="com.lwzw.cloud.bean.Relation">
+    select
+    <include refid="Base_Column_List"/>
+    from relation
+    where fromuid = #{uid} or touid = #{uid}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from relation
     where relaid = #{relaid,jdbcType=INTEGER}

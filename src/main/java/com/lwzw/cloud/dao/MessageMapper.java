@@ -20,5 +20,5 @@ public interface MessageMapper {
 
     List<Message> selectByFromAndToUid(@Param("from")Integer from,@Param("to")Integer to);
 
-    List<Message> selectByFromUid(@Param("from")Integer from);
+    List<Message> selectByUid(@Param("uid")Integer uid);
 }
