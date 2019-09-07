@@ -17,6 +17,18 @@ public class User {
         return uid;
     }
 
+    public User() {
+    }
+
+    public  User(User user){
+        this.uid = user.getUid();
+        this.username = user.getUsername();
+        this.passwords = user.getPasswords();
+        this.nickname = user.getNickname();
+        this.score = user.getScore();
+        this.capacity = user.getCapacity();
+    }
+
     public void setUid(Integer uid) {
         this.uid = uid;
     }

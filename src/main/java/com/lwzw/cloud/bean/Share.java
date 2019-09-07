@@ -1,19 +1,23 @@
 package com.lwzw.cloud.bean;
 
+import java.util.Date;
+
 public class Share {
     private Integer sid;
 
-    private Integer ufid;
+    private Integer fid;
 
     private Integer touid;
 
     private Integer fromuid;
 
-    private Boolean status;
+    private Integer status;
 
     private String code;
 
-    private Boolean isread;
+    private Integer isread;
+
+    private Date sharedate;
 
     public Integer getSid() {
         return sid;
@@ -23,12 +27,12 @@ public class Share {
         this.sid = sid;
     }
 
-    public Integer getUfid() {
-        return ufid;
+    public Integer getFid() {
+        return fid;
     }
 
-    public void setUfid(Integer ufid) {
-        this.ufid = ufid;
+    public void setFid(Integer fid) {
+        this.fid = fid;
     }
 
     public Integer getTouid() {
@@ -47,11 +51,11 @@ public class Share {
         this.fromuid = fromuid;
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -63,24 +67,19 @@ public class Share {
         this.code = code == null ? null : code.trim();
     }
 
-    public Boolean getIsread() {
+    public Integer getIsread() {
         return isread;
     }
 
-    public void setIsread(Boolean isread) {
+    public void setIsread(Integer isread) {
         this.isread = isread;
     }
 
-    @Override
-    public String toString() {
-        return "Share{" +
-                "sid=" + sid +
-                ", ufid=" + ufid +
-                ", touid=" + touid +
-                ", fromuid=" + fromuid +
-                ", status=" + status +
-                ", code='" + code + '\'' +
-                ", isread=" + isread +
-                '}';
+    public Date getSharedate() {
+        return sharedate;
+    }
+
+    public void setSharedate(Date sharedate) {
+        this.sharedate = sharedate;
     }
 }

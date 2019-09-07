@@ -3,15 +3,16 @@
 <mapper namespace="com.lwzw.cloud.dao.ShareMapper" >
   <resultMap id="BaseResultMap" type="com.lwzw.cloud.bean.Share" >
     <id column="sid" property="sid" jdbcType="INTEGER" />
-    <result column="ufid" property="ufid" jdbcType="INTEGER" />
+    <result column="fid" property="fid" jdbcType="INTEGER" />
     <result column="touid" property="touid" jdbcType="INTEGER" />
     <result column="fromuid" property="fromuid" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="BIT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="code" property="code" jdbcType="VARCHAR" />
-    <result column="isread" property="isread" jdbcType="BIT" />
+    <result column="isread" property="isread" jdbcType="INTEGER" />
+    <result column="sharedate" property="sharedate" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    sid, ufid, touid, fromuid, status, code, isread
+    sid, fid, touid, fromuid, status, code, isread, sharedate
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -24,12 +25,12 @@
     where sid = #{sid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lwzw.cloud.bean.Share" >
-    insert into share (sid, ufid, touid, 
+    insert into share (sid, fid, touid, 
       fromuid, status, code, 
-      isread)
-    values (#{sid,jdbcType=INTEGER}, #{ufid,jdbcType=INTEGER}, #{touid,jdbcType=INTEGER}, 
-      #{fromuid,jdbcType=INTEGER}, #{status,jdbcType=BIT}, #{code,jdbcType=VARCHAR}, 
-      #{isread,jdbcType=BIT})
+      isread, sharedate)
+    values (#{sid,jdbcType=INTEGER}, #{fid,jdbcType=INTEGER}, #{touid,jdbcType=INTEGER}, 
+      #{fromuid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, 
+      #{isread,jdbcType=INTEGER}, #{sharedate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lwzw.cloud.bean.Share" >
     insert into share
@@ -37,8 +38,8 @@
       <if test="sid != null" >
         sid,
       </if>
-      <if test="ufid != null" >
-        ufid,
+      <if test="fid != null" >
+        fid,
       </if>
       <if test="touid != null" >
         touid,
@@ -55,13 +56,16 @@
       <if test="isread != null" >
         isread,
       </if>
+      <if test="sharedate != null" >
+        sharedate,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sid != null" >
         #{sid,jdbcType=INTEGER},
       </if>
-      <if test="ufid != null" >
-        #{ufid,jdbcType=INTEGER},
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
       </if>
       <if test="touid != null" >
         #{touid,jdbcType=INTEGER},
@@ -70,21 +74,24 @@
         #{fromuid,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=BIT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="code != null" >
         #{code,jdbcType=VARCHAR},
       </if>
       <if test="isread != null" >
-        #{isread,jdbcType=BIT},
+        #{isread,jdbcType=INTEGER},
+      </if>
+      <if test="sharedate != null" >
+        #{sharedate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lwzw.cloud.bean.Share" >
     update share
     <set >
-      <if test="ufid != null" >
-        ufid = #{ufid,jdbcType=INTEGER},
+      <if test="fid != null" >
+        fid = #{fid,jdbcType=INTEGER},
       </if>
       <if test="touid != null" >
         touid = #{touid,jdbcType=INTEGER},
@@ -93,25 +100,29 @@
         fromuid = #{fromuid,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=BIT},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="code != null" >
         code = #{code,jdbcType=VARCHAR},
       </if>
       <if test="isread != null" >
-        isread = #{isread,jdbcType=BIT},
+        isread = #{isread,jdbcType=INTEGER},
+      </if>
+      <if test="sharedate != null" >
+        sharedate = #{sharedate,jdbcType=TIMESTAMP},
       </if>
     </set>
     where sid = #{sid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lwzw.cloud.bean.Share" >
     update share
-    set ufid = #{ufid,jdbcType=INTEGER},
+    set fid = #{fid,jdbcType=INTEGER},
       touid = #{touid,jdbcType=INTEGER},
       fromuid = #{fromuid,jdbcType=INTEGER},
-      status = #{status,jdbcType=BIT},
+      status = #{status,jdbcType=INTEGER},
       code = #{code,jdbcType=VARCHAR},
-      isread = #{isread,jdbcType=BIT}
+      isread = #{isread,jdbcType=INTEGER},
+      sharedate = #{sharedate,jdbcType=TIMESTAMP}
     where sid = #{sid,jdbcType=INTEGER}
   </update>
 </mapper>

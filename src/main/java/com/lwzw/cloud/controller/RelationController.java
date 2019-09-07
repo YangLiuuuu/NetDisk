@@ -108,14 +108,15 @@ public class RelationController {
         List<MessageViewObject> messageViewObjects = new ArrayList<>();
         for (Message msg : messages){
             MessageViewObject mv = new MessageViewObject();
-            loginUser.setPasswords("");//去掉密码
+            User tempLoginUser = new User(loginUser);//复制一个对象,防止破坏request中对象
+            tempLoginUser.setPasswords("");//去掉密码
             if (msg.getFromuid().equals(loginUser.getUid())){//自己是发送方
-                mv.setFromUser(loginUser);
+                mv.setFromUser(tempLoginUser);
                 mv.setToUser(userMapper.selectByPrimaryKey(msg.getTouid()));
                 mv.setIsSender(1);
             }else {
                 mv.setFromUser(userMapper.selectByPrimaryKey(msg.getFromuid()));
-                mv.setToUser(loginUser);
+                mv.setToUser(tempLoginUser);
                 mv.setIsSender(0);
             }
             mv.setMessage(msg);

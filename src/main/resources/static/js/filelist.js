@@ -15,7 +15,7 @@ $(function () {
             "serverSide": false,//是否服务器端分页
             "paging":true,//是否分页
             "lengthChange":false,//选择下拉框调整每页显示数量
-            'iDisplayLength': 7, //每页初始显示5条记录
+            'iDisplayLength': 7, //每页初始显示7条记录
             'pagingType':'full',
             "ajax": {
                 "url": tableUrl
