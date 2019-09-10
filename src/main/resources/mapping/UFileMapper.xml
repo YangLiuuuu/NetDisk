@@ -15,7 +15,6 @@
     <result column="name" property="fileName" jdbcType="VARCHAR" />
     <result column="savedate" property="saveDate" jdbcType="TIMESTAMP"/>
     <result column="size" property="size"/>
-    <result column="levels" property="levels"/>
   </resultMap>
   <sql id="Base_Column_List" >
     ufid, uid, fid, name,savedate
@@ -24,7 +23,7 @@
   <!--联合查询FileViewObject-->
   <select id="selectFileViewObject" resultMap="fileViewObject">
       select
-        ufid,uid,b.fid,name,savedate,size,levels
+        ufid,uid,b.fid,name,savedate,size
       from
       ufile a,file b
       where a.fid = b.fid and a.uid = #{user.uid}
@@ -32,7 +31,7 @@
 
   <select id="selectPictureFile" resultMap="fileViewObject">
     select
-           ufid,uid,b.fid,name,savedate,size,levels
+           ufid,uid,b.fid,name,savedate,size
     from
          ufile a,file b
     where a.fid = b.fid and a.uid = #{user.uid} and (name like '%jpg%' or name like '%png%' or name like '%jpeg%' or name like '%gif%')
@@ -40,7 +39,7 @@
 
   <select id="selectVideoAndMusicFile" resultMap="fileViewObject">
     select
-           ufid,uid,b.fid,name,savedate,size,levels
+           ufid,uid,b.fid,name,savedate,size
     from
          ufile a,file b
     where a.fid = b.fid and a.uid = #{user.uid} and (name like '%mp4%' or name like '%rmvb%' or name like '%mkv%' or name like '%avi%' or name like '%flv%'or name like '%mp3%' or name like '%ape%' or name like '%flac%' or name like '%aac%' or name like '%wma%')
@@ -48,7 +47,7 @@
 
   <select id="selectDocFile" resultMap="fileViewObject">
     select
-           ufid,uid,b.fid,name,savedate,size,levels
+           ufid,uid,b.fid,name,savedate,size
     from
          ufile a,file b
     where a.fid = b.fid and a.uid = #{user.uid} and (name like '%txt%' or name like '%ppt%' or name like '%xls%' or name like '%doc%' or name like '%docx%'or name like '%pdf%')

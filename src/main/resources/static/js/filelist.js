@@ -55,12 +55,17 @@ $(function () {
                 "target":"size",
                 "title":"大小",
                 "render":function (data) {
-                    return data + "MB"
+                    var result=0;
+                    if(data>1024){
+                        result = data/1024;
+                        return result.toFixed(2) + "GB"
+                    }else if (data<1024) {
+                        result = data*1024;
+                        return result.toFixed(2) + "KB"
+                    }else {
+                        return data.toFixed(2) + "MB"
+                    }
                 }
-            },{
-                "data":"levels",
-                "target":"levels",
-                "title":"下载等级"
             },{
                 "target":6,
                 "title":"操作",
@@ -169,12 +174,11 @@ $(function () {
 
 
     /**
-     * 上传按钮响应
+     * 上传按钮
      */
     $('#uploadbtn').click(function () {
         var formData = new FormData();
-        formData.append('file',$('#fileinput')[0].files[0]);//文件
-        formData.append('level',$('#level option:selected').val());//支持用户下载等级
+        formData.append('file',$('#fileinput')[0].files[0]);
         $.ajax({
             url:'/file/upload',
             type:'post',

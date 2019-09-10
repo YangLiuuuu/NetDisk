@@ -3,6 +3,9 @@ $(function () {
     loadFriendRequest();//加载好友请求
     loadFriendList();//加载好友列表
 
+    // setInterval(function () {
+    //     reloadFriendList();
+    // },10000);
 
     function reloadFriendList(){
         $('#friend-list-ul').empty();
@@ -10,7 +13,6 @@ $(function () {
         loadFriendList();
         loadFriendRequest();
     }
-
 
         /**
          * 接受好友请求按钮
@@ -24,11 +26,12 @@ $(function () {
             data:{msgid:msgid},
             success:function (data) {
                 if (data.status===0){
+                    reloadFriendList();
                     alert("添加成功")
-                    var divid = 'request-div-id-'+msgid;
-                    $('#'+divid).children('a').remove();
-                    var p = $("<p>你已接受对方的请求</p>");
-                    context.append(p);
+                    // var divid = 'request-div-id-'+msgid;
+                    // $('#'+divid).children('a').remove();
+                    // var p = $("<p>你已接受对方的请求</p>");
+                    // context.append(p);
                 }
             }
         })
@@ -48,7 +51,7 @@ $(function () {
                     var userdata = data.data;
                     for (var i=0;i<userdata.length;i++){
                         // console.log('加载'+userdata[i].user.nickname)
-                        var li = $("<li class='friend-list-item'></li>")
+                        var li = $("<li class='friend-list-item friend-request-item'></li>")
                         var div = $("<div style=''></div>")
                         var nickname_title;
                         if (userdata[i].isSender===0){//如果自己是接收者
@@ -59,6 +62,7 @@ $(function () {
                             }else if (userdata[i].message.accepted===-1){//已拒绝
                                 nickname_title = $("<strong>"+userdata[i].fromUser.nickname+"</strong>");
                                 div.append(nickname_title).append($("<p>你已拒绝对方请求</p>"))
+                                div.append($("<button type='button'>"));
                             }  else if (userdata[i].message.accepted===1){//已接受
                                 nickname_title = $("<strong>"+userdata[i].fromUser.nickname+"</strong>");
                                 div.append(nickname_title).append($("<p>你已同意对方请求</p>"))
@@ -134,9 +138,9 @@ $(function () {
                     // console.log(data.user);
                     $('#search-result-wrap').css('display','inline');
                     if (data.data.friend==true){
-                        $('#add-friend-btn').addClass("disabled").text('已是好友');
+                        $('#add-friend-btn').removeClass("active").addClass("disabled").text('已是好友');
                     }else {
-                        $('#add-friend-btn').addClass("active").text('加为好友');
+                        $('#add-friend-btn').removeClass("disabled").addClass("active").text('加为好友');
                     }
                     $('#search-result-nick').html('昵称:'+data.data.user.nickname)
                     $('#search-result-account').html('账号:'+data.data.user.username);
@@ -184,9 +188,11 @@ $(function () {
         $("#user-detail-nick").text(nick);
         $("#user-detail-account").text(account.substring(account.indexOf(":")+1));
         $("#user-detail-uid").text($(this).attr("friend-uid"));
+        $("#file-lib").css("display","none");
         $("#init-content").css("display","none");
         $("#profile_content").css("display","inline");
     })
+    
 
     //分享文件按钮点击
     $(document).on("click","#share-btn",function () {
@@ -206,8 +212,9 @@ $(function () {
                 "columns":[{
                     "data":null,
                     "target":0,
+                    "title":"<input type='checkbox' id='share-check-all'/>",
                     "render":function (data, type, row, meta) {
-                        return '<input type="checkbox" class="share-check" ufid='+row.ufid+'>'
+                        return '<input type="checkbox" class="share-lib-check" ufid='+row.ufid+'>'
                     }
                 },{
                     "data":"fileName",
@@ -226,12 +233,17 @@ $(function () {
                     "target":"size",
                     "title":"大小",
                     "render":function (data) {
-                        return data + "MB"
+                        var result=0;
+                        if(data>1024){
+                            result = data/1024;
+                            return result.toFixed(2) + "GB"
+                        }else if (data<1024) {
+                            result = data*1024;
+                            return result.toFixed(2) + "KB"
+                        }else {
+                            return data.toFixed(2) + "MB"
+                        }
                     }
-                },{
-                    "data":"levels",
-                    "target":"levels",
-                    "title":"下载等级"
                 }],
                 language:{
                     processing:'加载中',
@@ -258,6 +270,10 @@ $(function () {
          $('.share-check').prop('checked',false);
          $(this).prop('checked',true);
     })
+    
+    $(document).on('click','.share-lib-check',function () {
+
+    })
 
     /**
      * 分享确定按钮
@@ -279,5 +295,112 @@ $(function () {
             }
         })
     })
-    }
-)
+
+    /**
+     * 删除好友按钮
+     */
+    $('#delete-friend-btn').click(function () {
+        var d = dialog({
+            title: '提示',
+            content: '你确定要删除该好友吗?',
+            okValue: '确定',
+            ok: function () {
+                $.ajax({
+                    url:'/relation/deleteFriend',
+                    type:'post',
+                    data:{'friendUid':$('#user-detail-uid').text()},
+                    success:function (data) {
+                        if (data.status===0){
+                            alert("删除成功");
+                            $("#init-content").css("display","inline");
+                            $("#profile_content").css("display","none");
+                            reloadFriendList();
+                        } else {
+                            alert("删除失败")
+                        }
+
+                    }
+                })
+                return true;
+            },
+            cancelValue: '取消',
+            cancel: function () {}
+        })
+        d.show();
+    })
+
+    $('#file-lib-btn').click(function () {
+        var shareUid = $("#user-detail-uid").text();
+        var table = $('#file-lib-table').DataTable({
+            "processing": true,//显示等待信息
+            "searching": false,//是否支持页内搜索
+            "serverSide": false,//是否服务器端分页
+            "paging":true,//是否分页
+            "lengthChange":false,//选择下拉框调整每页显示数量
+            'iDisplayLength': 7, //每页初始显示7条记录
+            'pagingType':'full',
+            "destroy":true,
+            "ajax": {
+                "url": "/share/queryShareMessageList",
+                "data":{friendUid:shareUid},
+                "type":'post'
+            },
+            "columns":[{
+                "data":null,
+                "target":0,
+                "render":function (data, type, row, meta) {
+                    return '<input type="checkbox" class="share-lib-check" sid='+row.fid+'>'
+                }
+            },{
+                "data":"fileName",
+                "target":"fileName",
+                "title":"文件名"
+            },{
+                "data":"fileSize",
+                "target":"fileSize",
+                "title":"大小",
+                "render":function (data) {
+                    var result=0;
+                    if(data>1024){
+                        result = data/1024;
+                        return result.toFixed(2) + "GB"
+                    }else if (data<1024) {
+                        result = data*1024;
+                        return result.toFixed(2) + "KB"
+                    }else {
+                        return data.toFixed(2) + "MB"
+                    }
+                }
+            },{
+                "data":"shareUsername",
+                "target":"shareUsername",
+                "title":"分享人"
+            },{
+                "data":"shareDate",
+                "target":"shareDate",
+                "title":"分享时间",
+                "render":function  formateDate(time) {
+                    var date = new Date(time);
+                    return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+                    //return date;
+                }
+            }],
+            language:{
+                processing:'加载中',
+                info:'显示第_START_到第_END_条记录，共_TOTAL_条',
+                paginate:{
+                    "sFirst" : " 首页 ",
+                    'sPrevious':'<button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>上一页</button>',
+                    'sNext':'<button type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>下一页</button>',
+                    "sLast" : " 末页 "},
+                infoEmpty:'没有数据'
+
+            }
+        })
+        $("#init-content").css("display","none");
+        $("#profile_content").css("display","none");
+        $("#file-lib").css("display","inline");
+    })
+
+
+})

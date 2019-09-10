@@ -110,12 +110,17 @@ public class RelationController {
             MessageViewObject mv = new MessageViewObject();
             User tempLoginUser = new User(loginUser);//复制一个对象,防止破坏request中对象
             tempLoginUser.setPasswords("");//去掉密码
+            User user = null;
             if (msg.getFromuid().equals(loginUser.getUid())){//自己是发送方
                 mv.setFromUser(tempLoginUser);
-                mv.setToUser(userMapper.selectByPrimaryKey(msg.getTouid()));
+                user = userMapper.selectByPrimaryKey(msg.getTouid());
+                user.setPasswords("");
+                mv.setToUser(user);
                 mv.setIsSender(1);
             }else {
-                mv.setFromUser(userMapper.selectByPrimaryKey(msg.getFromuid()));
+                user = userMapper.selectByPrimaryKey(msg.getFromuid());
+                user.setPasswords("");
+                mv.setFromUser(user);
                 mv.setToUser(tempLoginUser);
                 mv.setIsSender(0);
             }
@@ -171,5 +176,25 @@ public class RelationController {
             friendList.add(friend);
         }
         return ServerResponse.createBySuccess(friendList);
+    }
+
+    @ResponseBody
+    @RequestMapping("deleteFriend")
+    public ServerResponse deleteFriend(@RequestParam("friendUid")String friendId,HttpServletRequest request){
+        User loginUser = (User) request.getSession().getAttribute("loginUser");
+        Integer loginUserId = loginUser.getUid();
+        Integer friendUid = Integer.valueOf(friendId);
+        Integer t = null;
+        if (loginUserId>friendUid){
+            t=loginUserId;
+            loginUserId=friendUid;
+            friendUid=t;
+        }
+        Relation relation = relationMapper.selectByFromAndToUid(loginUserId,friendUid);
+        int count = relationMapper.deleteByPrimaryKey(relation.getRelaid());
+        if (count>0){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
     }
 }

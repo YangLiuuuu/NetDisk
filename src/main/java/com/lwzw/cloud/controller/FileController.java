@@ -45,15 +45,13 @@ public class FileController  {
     /**
      * 文件上传，涉及一系列表操作，开启事务
      * @param multipartFile
-     * @param level
      * @param request
      * @return
      */
     @Transactional
     @ResponseBody
     @RequestMapping("/upload")
-    public ServerResponse fileUpload(@RequestParam("file")MultipartFile multipartFile,@RequestParam("level")String level,
-                                     HttpServletRequest request){
+    public ServerResponse fileUpload(@RequestParam("file")MultipartFile multipartFile, HttpServletRequest request){
         if (multipartFile.isEmpty()){
             return ServerResponse.createByErrorMessage("文件为空");
         }
@@ -84,10 +82,8 @@ public class FileController  {
 //        System.out.println(loginUser);
         userMapper.updateUserSelective(loginUser);
         request.setAttribute ("loginUser",loginUser);//更新request里保存的user
-
-        System.out.println("level:"+level);
         com.lwzw.cloud.bean.File tableFile = new com.lwzw.cloud.bean.File
-                (loginUser.getUid(),dbFileName,file.getPath(),fileSize, new Date(),0,0,Integer.valueOf(level));
+                (loginUser.getUid(),dbFileName,file.getPath(),fileSize, new Date());
         fileMapper.insert(tableFile);//更新文件表
 
         UFile userFile = new UFile(loginUser.getUid(),tableFile.getFid(),fileName,new Date());
@@ -108,9 +104,6 @@ public class FileController  {
         User user = (User) request.getSession().getAttribute("loginUser");
         com.lwzw.cloud.bean.File fileData = fileMapper.selectByPrimaryKey(uFile.getFid());
         File file = new File(fileData.getUrl());
-        if (user.getScore()/100<fileData.getLevels()){
-            return ServerResponse.createByErrorMessage("等级不足");
-        }
         if (!file.exists()){
             return ServerResponse.createByErrorMessage("内部错误");
         }
@@ -121,7 +114,7 @@ public class FileController  {
     public ServerResponse fileDownload(@RequestParam("ufid")String ufid, HttpServletResponse response,HttpServletRequest request) throws IOException {
         UFile uFile = uFileMapper.selectByPrimaryKey(Integer.valueOf(ufid));
         User user = (User) request.getSession().getAttribute("loginUser");
-        if (user.getUid()!=uFile.getUid()){
+        if (!user.getUid().equals(uFile.getUid())){
             response.sendRedirect("/illegalDownload");
             return ServerResponse.createByError();
         }

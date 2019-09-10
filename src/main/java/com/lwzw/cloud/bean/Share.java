@@ -19,6 +19,12 @@ public class Share {
 
     private Date sharedate;
 
+    private Integer likes;
+
+    private Integer dislikes;
+
+    private Integer ranks;
+
     public Integer getSid() {
         return sid;
     }
@@ -81,5 +87,46 @@ public class Share {
 
     public void setSharedate(Date sharedate) {
         this.sharedate = sharedate;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
+    public Integer getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(Integer dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public Integer getRanks() {
+        return ranks;
+    }
+
+    public void setRanks(Integer ranks) {
+        this.ranks = ranks;
+    }
+
+    @Override
+    public String toString() {
+        return "Share{" +
+                "sid=" + sid +
+                ", fid=" + fid +
+                ", touid=" + touid +
+                ", fromuid=" + fromuid +
+                ", status=" + status +
+                ", code='" + code + '\'' +
+                ", isread=" + isread +
+                ", sharedate=" + sharedate +
+                ", likes=" + likes +
+                ", dislikes=" + dislikes +
+                ", ranks=" + ranks +
+                '}';
     }
 }

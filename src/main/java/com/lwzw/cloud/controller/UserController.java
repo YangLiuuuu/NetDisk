@@ -20,6 +20,13 @@ public class UserController {
     @Autowired
     UserMapper userMapper;
 
+    /**
+     * 登陆
+     * @param username
+     * @param password
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public ServerResponse login(@RequestParam("username")String username,
@@ -35,6 +42,24 @@ public class UserController {
         return ServerResponse.createByError();
     }
 
+    /**
+     * 注销
+     * @return
+     */
+    @RequestMapping("/quit")
+    public String quit(HttpServletRequest request){
+        request.getSession().setAttribute("loginUser",null);
+        return "/";
+    }
+
+
+    /**
+     * 注册
+     * @param username
+     * @param password
+     * @param nickname
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/signup",method = RequestMethod.POST)
     public ServerResponse signUp(@RequestParam("username")String username,
@@ -56,6 +81,11 @@ public class UserController {
         return ServerResponse.createBySuccess();
     }
 
+    /**
+     * 验证用户名是否可用
+     * @param username
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "isUsernameValid")
     public ServerResponse isUsernameRegistered(@RequestParam("username")String username){

@@ -66,6 +66,12 @@
         .filelibbtn:hover{
             color: #2aabd2;
         }
+        .my-button{
+            border-radius: 10px;
+            border: 1px solid black;
+            text-align: center;
+            background:rgba(255, 251, 240, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -99,50 +105,71 @@
                 </div>
             </div>
             <div class="btn-group" style="margin: 15px">
-                <a class="btn btn-default col-md-offset-2" data-toggle="modal" data-target="#add-friend-modal">添加好友</a>
+                <a class="btn btn-default col-md-offset-2 my-button" data-toggle="modal" data-target="#add-friend-modal">添加好友</a>
             </div>
         </div>
         <div class="col-md-9">
 
-            <div id="init-content" class="profile-content" style="text-align: center;height: 550px;background-color:#90EE90">
-                <div style="padding-top: 250px">
+            <!--内容页原始内容-->
+            <div id="init-content" class="profile-content" style="text-align: center;height: 550px;background-color:#FFFFFF">
+                <img src="/img/share.png" style="width:100%;height:auto;">
+                <div style="padding-top: 10px">
                     <h2 class="text-center" >
                         <strong>分享文件给好友</strong>
                     </h2><hr />
                 </div>
             </div>
 
-            <div id="profile_content" style="display: none;height:550px;background-color: #90EE90" class="profile-content">
-                <div style="float: right;margin: 15px">
-                    <button type="button" class="btn-lg btn-default filelibbtn" aria-label="Left Align">
+            <!--内容页点击好友后显示内容-->
+            <div id="profile_content" style="display: none;height:550px;background-color: #E6E6FA" class="profile-content">
+                <div style="float: right;margin: 15px;">
+                    <button id="file-lib-btn" type="button" class="btn-lg btn-default filelibbtn" aria-label="Left Align">
                         <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>文件库
                     </button>
                 </div>
-                <div class="user-data-name">
+                <div class="user-data-name" style="">
                     <h2 class="text-center">
                         <strong>好友信息</strong>
                     </h2>
                 </div>
 
-                <div class="user-detail">
+                <div class="user-detail" style="">
                     <div>
                         <p class="user-detail-text">昵&nbsp;&nbsp;&nbsp;&nbsp;称:</p>
                         <p class="user-detail-text">账&nbsp;&nbsp;&nbsp;&nbsp;号:</p>
                     </div>
-                    <div >
+                    <div style="">
                         <p class="user-detail-text" style="display: none" id="user-detail-uid">1</p>
                         <p class="user-detail-text" id="user-detail-nick">小明</p>
                         <p class="user-detail-text" id="user-detail-account">123456</p>
                     </div>
                 </div>
-                <div class="user-detail" style="margin-top: 150px;padding-bottom: 70px">
-                    <button type="button" id="share-btn" class="btn btn-info" style="width: 200px;text-align: center;font-size: 20px" data-target="#share-modal">分享文件</button>
+                <div class="user-detail" style="margin-top: 150px;padding-bottom: 70px;">
+                    <button type="button" id="share-btn" class="btn btn-info my-button" style="width: 200px;text-align: center;font-size: 20px;color: #0c0c0c;background-color: #2aabd2" data-target="#share-modal">分享文件</button>
                     <button type="button" id="share-btn-hide" style="display: none" data-toggle="modal" data-target="#share-modal">分享文件</button>
-                    <button type="button" id="delete-friend-btn" class="btn btn btn-default" style="width: 200px;text-align: center;font-size: 20px;margin-left: 15px">删除好友</button>
+                    <button type="button" id="delete-friend-btn" class="btn btn btn-default my-button" style="width: 200px;text-align: center;font-size: 20px;margin-left: 15px">删除好友</button>
                 </div>
-
             </div>
 
+            <!--查看文件库显示内容-->
+            <div id="file-lib" style="display: none;height:550px;background-color: #E6E6FA" class="profile-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div>
+                            <input type="checkbox" id="checkall" style="margin-left: 5px"/>
+                            <button id="share-download-btn" type="button" style="border-radius: 10px;border-style: outset;text-align: center;background:rgba(255, 251, 240, 0.3);margin-left: 5px" class="btn-sm btn-default" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>下载
+                            </button>
+                            <button id="share-save-btn" type="button" style="border-radius: 10px;border-style: outset;text-align: center;background:rgba(255, 251, 240, 0.3);margin-left: 5px" class="btn-sm btn-default" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span>保存
+                            </button>
+                        </div>
+                        <table id="file-lib-table"  class="table dataTable table-hover" style="margin-top: 25px;min-width: 450px">
+                            <!--ajax加载表格-->
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

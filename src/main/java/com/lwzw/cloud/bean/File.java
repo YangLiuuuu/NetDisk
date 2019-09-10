@@ -15,24 +15,15 @@ public class File {
 
     private Date date;
 
-    private Integer likes;
-
-    private Integer dislike;
-
-    private Integer levels;
-
     public File() {
     }
 
-    public File(Integer upid, String fname, String url, Double size, Date date, Integer likes, Integer dislike, Integer levels) {
+    public File(Integer upid, String fname, String url, Double size, Date date) {
         this.upid = upid;
         this.fname = fname;
         this.url = url;
         this.size = size;
         this.date = date;
-        this.likes = likes;
-        this.dislike = dislike;
-        this.levels = levels;
     }
 
     public Integer getFid() {
@@ -83,29 +74,6 @@ public class File {
         this.date = date;
     }
 
-    public Integer getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Integer likes) {
-        this.likes = likes;
-    }
-
-    public Integer getDislike() {
-        return dislike;
-    }
-
-    public void setDislike(Integer dislike) {
-        this.dislike = dislike;
-    }
-
-    public Integer getLevels() {
-        return levels;
-    }
-
-    public void setLevels(Integer levels) {
-        this.levels = levels;
-    }
 
     @Override
     public String toString() {
@@ -116,9 +84,6 @@ public class File {
                 ", url='" + url + '\'' +
                 ", size=" + size +
                 ", date=" + date +
-                ", likes=" + likes +
-                ", dislike=" + dislike +
-                ", levels=" + levels +
                 '}';
     }
 }

@@ -9,19 +9,17 @@ public class FileViewObject {
     private String fileName;
     private Date saveDate;
     private Double size;
-    private Integer levels;
 
     public FileViewObject() {
     }
 
-    public FileViewObject(Integer ufid, Integer uid, Integer fid, String fileName, Date saveDate, Double size, Integer levels) {
+    public FileViewObject(Integer ufid, Integer uid, Integer fid, String fileName, Date saveDate, Double size) {
         this.ufid = ufid;
         this.uid = uid;
         this.fid = fid;
         this.fileName = fileName;
         this.saveDate = saveDate;
         this.size = size;
-        this.levels = levels;
     }
 
     public Integer getUfid() {
@@ -72,14 +70,6 @@ public class FileViewObject {
         this.size = size;
     }
 
-    public Integer getLevels() {
-        return levels;
-    }
-
-    public void setLevels(Integer levels) {
-        this.levels = levels;
-    }
-
     @Override
     public String toString() {
         return "FileViewObject{" +
@@ -89,7 +79,6 @@ public class FileViewObject {
                 ", fileName='" + fileName + '\'' +
                 ", saveDate=" + saveDate +
                 ", size=" + size +
-                ", levels=" + levels +
                 '}';
     }
 }

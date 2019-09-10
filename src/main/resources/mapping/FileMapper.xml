@@ -8,12 +8,9 @@
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="DOUBLE" />
     <result column="date" property="date" jdbcType="TIMESTAMP" />
-    <result column="likes" property="likes" jdbcType="INTEGER" />
-    <result column="dislike" property="dislike" jdbcType="INTEGER" />
-    <result column="levels" property="levels" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    fid, upid, fname, url, size, date, likes, dislike, levels
+    fid, upid, fname, url, size, date
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -31,11 +28,9 @@
     <!--配置keyProperty和useGeneratedKey mybatis会将插入后的id值返回到实体类-->
   <insert id="insert" parameterType="com.lwzw.cloud.bean.File" keyProperty="fid" useGeneratedKeys="true">
     insert into file (fid, upid, fname, 
-      url, size, date, likes, 
-      dislike, levels)
+      url, size, date)
     values (#{fid,jdbcType=INTEGER}, #{upid,jdbcType=INTEGER}, #{fname,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, #{date,jdbcType=TIMESTAMP}, #{likes,jdbcType=INTEGER},
-      #{dislike,jdbcType=INTEGER}, #{levels,jdbcType=INTEGER})
+      #{url,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, #{date,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lwzw.cloud.bean.File" >
     insert into file
@@ -58,15 +53,6 @@
       <if test="date != null" >
         date,
       </if>
-      <if test="likes != null" >
-        likes,
-      </if>
-      <if test="dislike != null" >
-        dislike,
-      </if>
-      <if test="levels != null" >
-        levels,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="fid != null" >
@@ -86,15 +72,6 @@
       </if>
       <if test="date != null" >
         #{date,jdbcType=TIMESTAMP},
-      </if>
-      <if test="likes != null" >
-        #{likes,jdbcType=INTEGER},
-      </if>
-      <if test="dislike != null" >
-        #{dislike,jdbcType=INTEGER},
-      </if>
-      <if test="levels != null" >
-        #{levels,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -116,15 +93,6 @@
       <if test="date != null" >
         date = #{date,jdbcType=TIMESTAMP},
       </if>
-      <if test="likes != null" >
-        likes = #{likes,jdbcType=INTEGER},
-      </if>
-      <if test="dislike != null" >
-        dislike = #{dislike,jdbcType=INTEGER},
-      </if>
-      <if test="levels != null" >
-        levels = #{levels,jdbcType=INTEGER},
-      </if>
     </set>
     where fid = #{fid,jdbcType=INTEGER}
   </update>
@@ -134,10 +102,7 @@
       fname = #{fname,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
       size = #{size,jdbcType=DOUBLE},
-      date = #{date,jdbcType=TIMESTAMP},
-      likes = #{likes,jdbcType=INTEGER},
-      dislike = #{dislike,jdbcType=INTEGER},
-      levels = #{levels,jdbcType=INTEGER}
+      date = #{date,jdbcType=TIMESTAMP}
     where fid = #{fid,jdbcType=INTEGER}
   </update>
 </mapper>
