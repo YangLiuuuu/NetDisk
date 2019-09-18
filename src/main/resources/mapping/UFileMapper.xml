@@ -65,10 +65,26 @@
     from ufile
     where uid=#{uid}
   </select>
+  <select id="selectByUFidAndUid" resultType="com.lwzw.cloud.bean.UFile">
+    select
+    <include refid="Base_Column_List"/>
+    from ufile
+    where fid=#{ufid} and uid = #{uid}
+  </select>
+  <select id="selectFileDownloadUrl" resultType="java.lang.String">
+    select url
+    from file,ufile
+    where file.fid=ufile.fid and ufid=#{ufid}
+  </select>
+    <select id="selectByFidAndUid" resultType="com.lwzw.cloud.bean.UFile">
+      select
+      <include refid="Base_Column_List"/>
+      from ufile
+      where fid=#{fid} and uid = #{uid}
+    </select>
 
 
-
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from ufile
     where ufid = #{ufid,jdbcType=INTEGER}
   </delete>
@@ -93,7 +109,7 @@
       <if test="name != null" >
         name,
       </if>
-      <if test="savadate != null">
+      <if test="savedate != null">
         savedate,
       </if>
     </trim>

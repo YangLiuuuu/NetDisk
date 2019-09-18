@@ -66,7 +66,7 @@
                enableDeleteByExample="false"
                enableSelectByExample="false"
                selectByExampleQueryId="false"/>-->
-        <table tableName="share" domainObjectName="Share"
+        <table tableName="report" domainObjectName="Report"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"

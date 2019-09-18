@@ -3,11 +3,11 @@ package com.lwzw.cloud.bean;
 public class Report {
     private Integer rid;
 
-    private Integer fid;
+    private Integer sid;
 
     private Integer uid;
 
-    private String desc;
+    private String description;
 
     private Boolean isread;
 
@@ -19,12 +19,12 @@ public class Report {
         this.rid = rid;
     }
 
-    public Integer getFid() {
-        return fid;
+    public Integer getSid() {
+        return sid;
     }
 
-    public void setFid(Integer fid) {
-        this.fid = fid;
+    public void setSid(Integer sid) {
+        this.sid = sid;
     }
 
     public Integer getUid() {
@@ -35,12 +35,12 @@ public class Report {
         this.uid = uid;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 
     public Boolean getIsread() {
@@ -49,16 +49,5 @@ public class Report {
 
     public void setIsread(Boolean isread) {
         this.isread = isread;
-    }
-
-    @Override
-    public String toString() {
-        return "Report{" +
-                "rid=" + rid +
-                ", fid=" + fid +
-                ", uid=" + uid +
-                ", desc='" + desc + '\'' +
-                ", isread=" + isread +
-                '}';
     }
 }

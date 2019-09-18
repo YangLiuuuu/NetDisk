@@ -25,13 +25,34 @@
   </select>
   <select id="selectByFromAndToUid" resultType="com.lwzw.cloud.bean.viewObject.ShareMessageViewObject">
     select
-    s.sid,f.fid,uf.name as fileName,f.size as fileSize,u.nickname as shareUsername,s.sharedate as shareDate
-    from share s,user u,ufile uf,file f
-    where ((fromuid = #{from} and touid = #{to}) or (fromuid = #{to} and touid = #{to})) and s.fromuid=u.uid and s.fid=uf.ufid and uf.fid = f.fid
+           s.sid,f.fid,uf.name as fileName,f.size as fileSize,u.nickname as shareUsername,s.sharedate as shareDate
+    from
+         share s,user u,ufile uf,file f
+    where
+            ((fromuid = #{from} and touid = #{to}) or (fromuid = #{to} and touid = #{from})) and s.fromuid=u.uid and s.fid=uf.ufid and uf.fid = f.fid
   </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from share
-    where sid = #{sid,jdbcType=INTEGER}
+  <select id="selectCommonShare" resultType="com.lwzw.cloud.bean.viewObject.CommonShareViewObject">
+    select
+           s.sid,u.nickname,uf.name as fileName,s.ranks,s.sharedate as shareDate
+    from
+         share as s,ufile as uf,user as u
+    where
+        s.fid = uf.ufid and s.fromuid = u.uid and s.status = 0
+  </select>
+  <select id="selectShareDetail" resultType="com.lwzw.cloud.bean.viewObject.ShareDetailViewObject">
+    select
+           s.sid,s.fromuid as upid,u.nickname as shareUser,uf.name as fileName,s.sharedate as shareDate,s.likes,s.dislikes,s.ranks
+    from
+         user u, ufile uf,share s
+    where
+        s.status=0 and  s.fid=uf.ufid and s.fromuid = u.uid
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete
+    from
+         share
+    where
+         sid = #{sid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lwzw.cloud.bean.Share" >
     insert into share (sid, fid, touid, 
@@ -107,10 +128,10 @@
         #{likes,jdbcType=INTEGER},
       </if>
       <if test="dislikes != null" >
-        #{likes,jdbcType=INTEGER},
+        #{dislikes,jdbcType=INTEGER},
       </if>
       <if test="ranks != null" >
-        #{likes,jdbcType=INTEGER},
+        #{ranks,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -151,14 +172,17 @@
     where sid = #{sid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lwzw.cloud.bean.Share" >
-    update share
-    set fid = #{fid,jdbcType=INTEGER},
+    update
+      share
+    set
+      fid = #{fid,jdbcType=INTEGER},
       touid = #{touid,jdbcType=INTEGER},
       fromuid = #{fromuid,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       code = #{code,jdbcType=VARCHAR},
       isread = #{isread,jdbcType=INTEGER},
       sharedate = #{sharedate,jdbcType=TIMESTAMP}
-    where sid = #{sid,jdbcType=INTEGER}
+    where
+      sid = #{sid,jdbcType=INTEGER}
   </update>
 </mapper>

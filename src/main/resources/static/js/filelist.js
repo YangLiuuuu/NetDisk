@@ -153,7 +153,7 @@ $(function () {
         var filename = $('.row_selected a').text();
        // var content = '<label for="filename">名称</label><input type="text" id="diafilename" value='+filename+'>'
         var form = $('<form action="/file/modifyFileName" method="post"><label for="filename">名称</label><input name="filename"' +
-                'value='+filename+'><input type="hidden" name="ufid" value='+ufid+'></form>');
+                ' value='+filename+'><input type="hidden" name="ufid" value='+ufid+'></form>');
         var d = dialog({
             content:form,
             align:'left',

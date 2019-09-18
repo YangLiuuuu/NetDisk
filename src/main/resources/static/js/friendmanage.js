@@ -214,7 +214,7 @@ $(function () {
                     "target":0,
                     "title":"<input type='checkbox' id='share-check-all'/>",
                     "render":function (data, type, row, meta) {
-                        return '<input type="checkbox" class="share-lib-check" ufid='+row.ufid+'>'
+                        return '<input type="checkbox" class="share-check" ufid='+row.ufid+'>'
                     }
                 },{
                     "data":"fileName",
@@ -262,14 +262,6 @@ $(function () {
         $("#share-btn-hide").click();
 
     });
-
-    /**
-     * 分享 checkbox单选
-     */
-    $(document).on('click','.share-check',function () {
-         $('.share-check').prop('checked',false);
-         $(this).prop('checked',true);
-    })
     
     $(document).on('click','.share-lib-check',function () {
 
@@ -329,6 +321,9 @@ $(function () {
         d.show();
     })
 
+    /**
+     * 查看文件库按钮
+     */
     $('#file-lib-btn').click(function () {
         var shareUid = $("#user-detail-uid").text();
         var table = $('#file-lib-table').DataTable({
@@ -337,7 +332,7 @@ $(function () {
             "serverSide": false,//是否服务器端分页
             "paging":true,//是否分页
             "lengthChange":false,//选择下拉框调整每页显示数量
-            'iDisplayLength': 7, //每页初始显示7条记录
+            'iDisplayLength': 9, //每页初始显示7条记录
             'pagingType':'full',
             "destroy":true,
             "ajax": {
@@ -402,5 +397,91 @@ $(function () {
         $("#file-lib").css("display","inline");
     })
 
+    /**
+     * 文件库checkbox全选
+     */
+    $('#share-lib-checkall').click(function () {
+        var checked = $(this).prop('checked');
+        var share_check = $('.share-lib-check');
+        if (checked===true){
+            share_check.prop('checked',true);
+            share_check.parent().parent().css('background','#DEB887');
+        } else{
+            share_check.prop('checked',false);
+            share_check.parent().parent().css('background','#FFFFFF');
+        }
+    })
+
+    /**
+     * 文件库保存按钮
+     */
+    $('#share-save-btn').click(function () {
+        var ufids = new Array();
+        $('.share-lib-check:checked').each(function () {
+            ufids.push($(this).attr('sid'));
+        });
+        if (ufids.length<=0) return;
+        $.ajax({
+            url: '/share/saveShareFile',
+            type: 'post',
+            traditional:true,
+            data: {'ufids': ufids},
+            success: function (data) {
+                if (data.status===0){
+                    alert(data.data.existCount+"个文件已存在,"+"保存了"+data.data.updateCount+"个文件");
+                    var share_check = $('.share-lib-check');
+                    share_check.prop('checked',false);
+                    share_check.parent().parent().css('background','#FFFFFF');
+                }else {
+                    alert("保存失败");
+                }
+            }
+        })
+    })
+
+    /**
+     * 文件库文件项checkbox
+     */
+    $(document).on('click','.share-lib-check',function () {
+        var context = $(this);
+        var checked = context.prop('checked');
+        if (checked===true){
+            context.prop('checked','true');
+            context.parent().parent().css('background','#DEB887');
+            // $('#share-top-bar').css('background','#FF7F50');
+        }else{
+            context.prop('checked',false);
+            context.parent().parent().css('background','#FFFFFF');
+            // $('#share-top-bar').css('background','#FFFFFF');
+        }
+    })
+
+    /**
+     * 下载分享文件
+     */
+    $('#share-download-btn').click(function () {
+        var shareitem = $('.share-lib-check');
+        var ufids = "";
+        for (var i=0;i<shareitem.length;i++){
+            if ($(shareitem[i]).prop('checked')===true){
+                ufids+=$(shareitem[i]).attr("sid")+"-";
+            }
+        }
+        ufids = ufids.substr(0,ufids.length-1);
+        $('#batch-download-input').val(ufids);
+        $('#batch-download-form').submit();
+        shareitem.each(function () {
+            $(this).prop('checked',false);
+            $(this).parent().parent().css('background','#FFFFFF');
+        })
+    })
+    
+    /**
+     * 分享 弹出框 checkbox单选
+     */
+    $(document).on('click','.share-check',function () {
+        $('.share-check').prop('checked',false);
+        $(this).prop('checked',true);
+    })
 
 })

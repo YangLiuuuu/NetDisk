@@ -1,6 +1,8 @@
 package com.lwzw.cloud.dao;
 
 import com.lwzw.cloud.bean.Share;
+import com.lwzw.cloud.bean.viewObject.CommonShareViewObject;
+import com.lwzw.cloud.bean.viewObject.ShareDetailViewObject;
 import com.lwzw.cloud.bean.viewObject.ShareMessageViewObject;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +22,8 @@ public interface ShareMapper {
     int updateByPrimaryKey(Share record);
 
     List<ShareMessageViewObject> selectByFromAndToUid(@Param("from")Integer from, @Param("to")Integer to);
+
+    List<CommonShareViewObject> selectCommonShare();
+
+    List<ShareDetailViewObject> selectShareDetail();
 }

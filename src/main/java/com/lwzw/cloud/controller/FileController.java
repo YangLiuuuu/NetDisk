@@ -8,6 +8,7 @@ import com.lwzw.cloud.constant.ServerResponse;
 import com.lwzw.cloud.dao.FileMapper;
 import com.lwzw.cloud.dao.UFileMapper;
 import com.lwzw.cloud.dao.UserMapper;
+import com.lwzw.cloud.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,6 +57,7 @@ public class FileController  {
         if (multipartFile.isEmpty()){
             return ServerResponse.createByErrorMessage("文件为空");
         }
+
         String fileName = multipartFile.getOriginalFilename();
         User loginUser = (User) request.getSession().getAttribute("loginUser");
         String path = Constant.homePath+loginUser.getUsername();
@@ -110,6 +113,14 @@ public class FileController  {
         return ServerResponse.createBySuccess();
     }
 
+    /**
+     * 文件下载
+     * @param ufid 用户文件id
+     * @param response
+     * @param request
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/download")
     public ServerResponse fileDownload(@RequestParam("ufid")String ufid, HttpServletResponse response,HttpServletRequest request) throws IOException {
         UFile uFile = uFileMapper.selectByPrimaryKey(Integer.valueOf(ufid));
@@ -235,6 +246,88 @@ public class FileController  {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+        return ServerResponse.createBySuccess();
+    }
+
+    /**
+     * 文件批量下载
+     * @return
+     */
+    @RequestMapping("/batchDownload")
+    public ServerResponse fileBatchDownload(@RequestParam("ufids")String ufids,HttpServletResponse response){
+        /**
+         * 查询出文件存储路径，存储在fileUrls中
+         */
+        String headerKey = "Content-Disposition";
+        String headerValue = null;
+        List<File> fileUrls = new ArrayList<>();
+        if (ufids.length()<=0){
+            return ServerResponse.createByErrorMessage("未选择文件");
+        }
+
+        for (String ufid:ufids.split("-")){
+            fileUrls.add(new File(uFileMapper.selectFileDownloadUrl(Integer.valueOf(ufid))));
+        }
+
+        UFile firstFile = uFileMapper.selectByPrimaryKey(Integer.valueOf(ufids.split("-")[0]));//获取第一个文件名，返回给用户弹窗下载时做文件名
+        String filename = firstFile.getName();//若文件有后缀的话去掉文件后缀
+        if (filename.lastIndexOf(".")!=-1){
+            filename = filename.substring(0,filename.lastIndexOf("."));
+        }
+
+        //如果只选择了一个文件，那就单文件下载
+        if (fileUrls.size()==1){
+            OutputStream os = null;
+            BufferedInputStream bis = null;
+            byte[] buff = new byte[1024];
+            int i;
+            try {
+                headerValue = String.format("attachment; filename=\"%s\"", URLEncoder.encode(firstFile.getName(),"UTF-8"));
+                response.setHeader(headerKey, headerValue);
+                os = response.getOutputStream();
+                bis = new BufferedInputStream(new FileInputStream(fileUrls.get(0)));
+                i = bis.read(buff);
+                while (i != -1){
+                    os.write(buff,0,buff.length);
+                    os.flush();
+                    i = bis.read(buff);
+                }
+                response.flushBuffer();
+            }catch (Exception e){
+                e.printStackTrace();
+                return ServerResponse.createByError();
+            }finally {
+                if (null!=os){
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return ServerResponse.createBySuccess();
+        }
+
+        OutputStream os  = null;
+        try {
+            headerValue = String.format("attachment; filename=\"%s\"", URLEncoder.encode("[批量下载]"+filename+"等.zip","UTF-8"));
+            response.setHeader(headerKey, headerValue);
+
+            os = response.getOutputStream();
+            FileUtils.toZip(fileUrls,os);//将压缩文件写入输出流
+            response.flushBuffer();//刷新缓冲区
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ServerResponse.createByErrorMessage("压缩文件出错");
+        }finally {
+            if (null != os){
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return ServerResponse.createBySuccess();
     }
 

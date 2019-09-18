@@ -30,4 +30,10 @@ public interface UFileMapper {
     List<FileViewObject> selectVideoAndMusicFile(@Param("user")User user);
 
     List<FileViewObject> selectDocFile(@Param("user")User user);
+
+    UFile selectByUFidAndUid(@Param("ufid")Integer ufid,@Param("uid")Integer uid);
+
+    String selectFileDownloadUrl(@Param("ufid")Integer ufid);
+
+    UFile selectByFidAndUid(@Param("fid") Integer fid, @Param("uid") Integer uid);
 }
