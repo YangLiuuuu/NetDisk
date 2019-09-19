@@ -25,7 +25,7 @@
   </select>
   <select id="selectByFromAndToUid" resultType="com.lwzw.cloud.bean.viewObject.ShareMessageViewObject">
     select
-           s.sid,f.fid,uf.name as fileName,f.size as fileSize,u.nickname as shareUsername,s.sharedate as shareDate
+           s.sid,uf.ufid as fid,uf.name as fileName,f.size as fileSize,u.nickname as shareUsername,s.sharedate as shareDate
     from
          share s,user u,ufile uf,file f
     where

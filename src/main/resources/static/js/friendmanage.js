@@ -344,7 +344,7 @@ $(function () {
                 "data":null,
                 "target":0,
                 "render":function (data, type, row, meta) {
-                    return '<input type="checkbox" class="share-lib-check" sid='+row.fid+'>'
+                    return '<input type="checkbox" class="share-lib-check" ufid='+row.fid+'>'
                 }
             },{
                 "data":"fileName",
@@ -418,7 +418,7 @@ $(function () {
     $('#share-save-btn').click(function () {
         var ufids = new Array();
         $('.share-lib-check:checked').each(function () {
-            ufids.push($(this).attr('sid'));
+            ufids.push($(this).attr('ufid'));
         });
         if (ufids.length<=0) return;
         $.ajax({
@@ -464,7 +464,7 @@ $(function () {
         var ufids = "";
         for (var i=0;i<shareitem.length;i++){
             if ($(shareitem[i]).prop('checked')===true){
-                ufids+=$(shareitem[i]).attr("sid")+"-";
+                ufids+=$(shareitem[i]).attr("ufid")+"-";
             }
         }
         ufids = ufids.substr(0,ufids.length-1);
