@@ -73,7 +73,7 @@ $(function () {
 
     $("#share-confirm-btn").click(function () {
         var shareUfid = $('.share-check:checked').attr('ufid');
-        var form = $("<form action='/share/addShare' type='post'><label for='ranks'>等级<select name='ranks'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>" +
+        var form = $("<form action='/share/addShare' type='post'><label for='ranks'>等级<select name='ranks'><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>" +
             "</select><input name='shareUfid' value='"+shareUfid+"' style='display: none'/><input name='type' value='0' style='display: none'/></form>")
         var d = dialog({
             title: '选择下载等级',
@@ -82,6 +82,7 @@ $(function () {
             ok: function () {
                 form.ajaxSubmit();
                 alert("分享完成");
+                loadshareList();
                 return true;
             },
             cancelValue: '取消',

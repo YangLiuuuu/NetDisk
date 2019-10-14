@@ -12,14 +12,14 @@
     rid, sid, uid, description, isread
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from report
     where rid = #{rid,jdbcType=INTEGER}
   </select>
   <select id="selectByUserAndSid" resultType="com.lwzw.cloud.bean.Report">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from report
     where uid = #{uid} and sid = #{sid}
   </select>

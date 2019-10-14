@@ -12,9 +12,9 @@ spring:
   #数据源配置
   datasource:
     username: root
-    password: 1909227160
+    password: liuYang123.
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/cloud?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://49.232.158.108:3307/webcloud?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
 
   # mvc请求映射配置，使用默认文件寻找规则，后缀为html
 #  mvc:

@@ -3,9 +3,9 @@ $(function () {
     loadFriendRequest();//加载好友请求
     loadFriendList();//加载好友列表
 
-    // setInterval(function () {
-    //     reloadFriendList();
-    // },10000);
+    setInterval(function () {
+        reloadFriendList();
+    },10000);
 
     function reloadFriendList(){
         $('#friend-list-ul').empty();

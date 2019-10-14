@@ -75,8 +75,7 @@ $(function () {
                 "width":"10%",
                 "render":function (data, type, row, meta) {
                     return data =  '<button class="btn btn-danger btn-sm deletefilebtn' +
-                        '" data-id=' + row.ufid + '><i class="fa fa-trash-o"></i>删除</button>'
-                        +'<button class="btn btn-primary btn-sm sharefile" data-id=' + row.ufid + '><i class="fa icon-share-alt"></i>分享</button>';
+                        '" data-id=' + row.ufid + '><i class="fa fa-trash-o"></i>删除</button>';
                 }
             }
             ],

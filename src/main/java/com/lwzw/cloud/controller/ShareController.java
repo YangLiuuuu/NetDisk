@@ -148,6 +148,10 @@ public class ShareController {
         if (type.equals("1")){
             share.setLikes(++likes);
             user.setScore(++score);//增加经验
+            if (user.getScore()%500==0 && user.getScore()/500 <= 5){//恰好升级
+                user.setCapacity(user.getCapacity()+1024);//增加1G容量
+                userMapper.updateUserSelective(user);
+            }
             if (null==zan){
                 zan = new Zan();
                 zan.setSid(Integer.valueOf(sid));
@@ -165,6 +169,10 @@ public class ShareController {
             }else{
                 share.setLikes(likes);//取消点赞
                 user.setScore(--score);//减少经验
+                if (score%500==0 && score/500<=5){
+                    user.setCapacity(user.getCapacity()-1024);
+                    userMapper.updateUserSelective(user);
+                }
             }
             zan.setStatus(0);
             zanMapper.updateByPrimaryKeySelective(zan);
@@ -179,6 +187,9 @@ public class ShareController {
     public ServerResponse addShare(@RequestParam("sid")String sid,HttpServletRequest request){
         User user = (User) request.getSession().getAttribute("loginUser");
         Share share = shareMapper.selectByPrimaryKey(Integer.valueOf(sid));
+        if (user.getScore()/500<share.getRanks()){
+            return ServerResponse.createBySuccessMessage("等级不足!");
+        }
         UFile uFile = UFileMapper.selectByPrimaryKey(share.getFid());
         UFile newFile = uFileMapper.selectByFidAndUid(uFile.getFid(),user.getUid());
         int count ;

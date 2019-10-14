@@ -20,7 +20,7 @@
     <script src="Content/bootstrap/js/bootstrap.min.js"></script>
     <script src="Content/sidebar-menu/sidebar-menu.js"></script>
     <script src="Content/bootstrap/js/bootstrap-tab.js"></script>
-
+    <script src="/js/main.js"></script>
 </head>
 <body>
     <div class="navbar navbar-default" id="navbar">
@@ -51,8 +51,9 @@
                            <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                                <li>
                                    <a href="#">
-                                       <i class="icon-user"></i>
-                                       个人资料
+                                       <i >剩余空间</i>
+                                       <input type="hidden" id="capacity-hidden" th:value="${session.loginUser.capacity}">
+                                       <p id="capacity">1.99GB</p>
                                    </a>
                                </li>
                                <li class="divider"></li>
@@ -176,5 +177,6 @@
     </script>
     <script src="Content/ace/js/ace-extra.min.js"></script>
     <script src="Content/ace/js/ace.min.js"></script>
+
 </body>
 </html>

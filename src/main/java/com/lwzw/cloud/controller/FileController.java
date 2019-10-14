@@ -81,6 +81,9 @@ public class FileController  {
             return ServerResponse.createByErrorMessage("主机保存文件失败");
         }
         loginUser.setScore(loginUser.getScore()+1);//增加经验
+        if (loginUser.getScore()%500==0 && loginUser.getScore()/500 <= 5){//升级
+            userCapacity+=1024;
+        }
         loginUser.setCapacity(userCapacity-fileSize);//减容量
 //        System.out.println(loginUser);
         userMapper.updateUserSelective(loginUser);
